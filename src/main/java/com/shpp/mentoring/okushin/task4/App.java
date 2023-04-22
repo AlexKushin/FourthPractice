@@ -64,7 +64,7 @@ public class App {
                         watch.start();
                         SqlExecute.executeSqlScript(url, user, password, "dmlCommandForFillingTable.sql");
                         watch.stop();
-                        logger.info("Filling products to stores= " + watch.getTime() / 1000.0);
+                        logger.info("Filling products to stores= {}" , watch.getTime() / 1000.0);
                         watch.reset();
                         Scanner scanner = new Scanner(System.in);
                         String productType = "";
@@ -72,9 +72,9 @@ public class App {
                             logger.info("Введіть тип товару: ");
                             productType = scanner.nextLine();
                             watch.start();
-                            SqlExecute.executeQuerySqlScript(url, user, password, "sqlCommandsToExecute.sql", productType);
+                             SqlExecute.executeQuerySqlScript(url, user, password, "sqlCommandsToExecute.sql", productType);
                             watch.stop();
-                            logger.info("Search store time= " + watch.getTime() / 1000.0);
+                            logger.info("Search store time= {}", watch.getTime() / 1000.0);
                             watch.reset();
                         }
                         scanner.close();
