@@ -1,9 +1,4 @@
 
-9
-	types.csv,5\9\5910b23e3cb396923d634382d9ba0e66ee162137
-:
-
-stores.csv,e\2\e26b6e6c018e3fe32b82ac4e45332c27fc367b6a
 `
 0src/main/resources/dmlCommandForFillingTable.sql,8\2\827c3a8e5a14895b083a81847c0fdacd3f4a5811
 [
