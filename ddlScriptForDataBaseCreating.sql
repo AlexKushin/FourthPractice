@@ -17,7 +17,6 @@ CREATE TABLE IF NOT EXISTS availability_goods.products
     id           SERIAL PRIMARY KEY,
     type_id      INT NOT NULL,
     product_name VARCHAR(70),
-    quantity     INT DEFAULT (1),
     FOREIGN KEY (type_id) REFERENCES availability_goods.types (id)
 );
 CREATE TABLE IF NOT EXISTS availability_goods.quantity_in_store

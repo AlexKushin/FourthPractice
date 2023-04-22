@@ -2,6 +2,8 @@ package com.shpp.mentoring.okushin.task4;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -13,20 +15,20 @@ import java.sql.SQLException;
 
 public class CsvImporter {
 
-
-    public void importToDB(String jdbcURL, String username, String password, String csvFilePath, String tableName) {
+    private static final Logger logger = LoggerFactory.getLogger(CsvImporter.class);
+    public static void importToDB(String jdbcURL, String username, String password, String csvFilePath, String tableName) {
 
         try (Connection connection = DriverManager.getConnection(jdbcURL, username, password)) {
 
-            // Создание объекта чтения CSV-файла
+
             CSVReader reader = new CSVReader(new FileReader(csvFilePath));
 
             String[] nextLine;
 
-            // Первая строка CSV-файла - заголовок
+
             String[] header = reader.readNext();
 
-            // Формируем запрос на вставку данных в таблицу
+
             StringBuilder sql = new StringBuilder("INSERT INTO ");
             sql.append(tableName);
             sql.append("(");
@@ -45,10 +47,10 @@ public class CsvImporter {
             }
             sql.append(")");
 
-            // Создание Prepared Statement для выполнения запроса
+
             PreparedStatement statement = connection.prepareStatement(sql.toString());
 
-            // Чтение остальных строк CSV-файла и вставка данных в таблицу
+
             while ((nextLine = reader.readNext()) != null) {
                 for (int i = 0; i < header.length; i++) {
                     statement.setString(i + 1, nextLine[i]);
@@ -56,17 +58,15 @@ public class CsvImporter {
                 statement.executeUpdate();
             }
 
-            System.out.println("Данные успешно импортированы!");
+            logger.info("Data was successfully imported");
             reader.close();
 
-        } catch (SQLException e) {
-            System.out.println("Ошибка SQL: " + e.getMessage());
+        } catch (SQLException | CsvValidationException e) {
+            logger.error("Error SQL: " + e.getMessage());
         } catch (FileNotFoundException e) {
-            System.out.println("Файл не найден: " + e.getMessage());
+            logger.error("There is no file to read " + e.getMessage());
         } catch (IOException e) {
-            System.out.println("Ошибка ввода/вывода: " + e.getMessage());
-        } catch (CsvValidationException e) {
-            throw new RuntimeException(e);
+            logger.error("Error whole input/output " + e.getMessage());
         }
 
     }

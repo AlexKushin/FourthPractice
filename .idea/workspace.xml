@@ -4,25 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ace0e323-7ca4-4586-8abc-a463354e5c92" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ddlScriptForDataBaseCreating.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dmlCommandForFillingTable.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sqlCommandsToExecute.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/shpp/mentoring/okushin/task4/App.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/shpp/mentoring/okushin/task4/CsvImporter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/shpp/mentoring/okushin/task4/GenerateThread.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/shpp/mentoring/okushin/task4/Product.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/shpp/mentoring/okushin/task4/ProductGenerator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/shpp/mentoring/okushin/task4/SqlExecute.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/shpp/mentoring/okushin/task4/AppTest.java" afterDir="false" />
+    <list default="true" id="ace0e323-7ca4-4586-8abc-a463354e5c92" name="Changes" comment="first commit third practice">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ddlScriptForDataBaseCreating.sql" beforeDir="false" afterPath="$PROJECT_DIR$/ddlScriptForDataBaseCreating.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/shpp/mentoring/okushin/task4/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/shpp/mentoring/okushin/task4/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/shpp/mentoring/okushin/task4/CsvImporter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/shpp/mentoring/okushin/task4/CsvImporter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/shpp/mentoring/okushin/task4/SqlExecute.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/shpp/mentoring/okushin/task4/SqlExecute.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +24,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -64,7 +56,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "extract.method.default.visibility": "private",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "develop",
     "last_opened_file_path": "C:/workspace/thirdPractice",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -129,12 +121,24 @@
       <workItem from="1681341689787" duration="25895000" />
       <workItem from="1681555652207" duration="1140000" />
       <workItem from="1681556871711" duration="25728000" />
-      <workItem from="1681823211095" duration="36794000" />
+      <workItem from="1681823211095" duration="44292000" />
     </task>
+    <task id="LOCAL-00001" summary="first commit third practice">
+      <created>1682032657538</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1682032657538</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="first commit third practice" />
+    <option name="LAST_COMMIT_MESSAGE" value="first commit third practice" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

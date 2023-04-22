@@ -3,7 +3,6 @@ package com.shpp.mentoring.okushin.task4;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
@@ -18,30 +17,25 @@ import java.util.concurrent.Executors;
 public class App {
     private static final Logger logger = LoggerFactory.getLogger(App.class);
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
         String url = "jdbc:postgresql://localhost:5432/epicentr_repo";
         String user = "postgres";
         String password = "1234password4321";
         StopWatch watch = new StopWatch();
-        watch.start();
-
-        watch.stop();
-        System.out.println(watch.getTime() / 1000.0);
-
         try {
             SqlExecute.executeSqlScript(url, user, password, "ddlScriptForDataBaseCreating.sql");
 
-            CsvImporter csvImporter = new CsvImporter();
-            csvImporter.importToDB(url, user, password,
+            CsvImporter.importToDB(url, user, password,
                     "stores.csv", "availability_goods.stores");
-            csvImporter.importToDB(url, user, password,
+            CsvImporter.importToDB(url, user, password,
                     "types.csv", "availability_goods.types");
+            //    SqlExecute.executeSqlCommand(url, user, password, "CREATE INDEX indexType ON availability_goods.types (id);");
             int storesCount = SqlExecute.executeQuerySqlScript(url, user, password, "SELECT count(*) from availability_goods.stores;");
-            System.out.println(storesCount);
+           // System.out.println(storesCount);
             int typesCount = SqlExecute.executeQuerySqlScript(url, user, password, "SELECT count(*) from availability_goods.types;");
-            System.out.println(typesCount);
-
-            ExecutorService executorService = Executors.newFixedThreadPool(10);
+            //System.out.println(typesCount);
+            int numberThreads = 10;
+            ExecutorService executorService = Executors.newFixedThreadPool(numberThreads);
 
             StringBuilder sqlBuilder = new StringBuilder("INSERT INTO availability_goods.products (type_id,product_name) VALUES");
             for (int i = 0; i < 999; i++) {
@@ -53,28 +47,35 @@ public class App {
             try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
                 Validator validator = factory.getValidator();
                 ProductGenerator generator = new ProductGenerator(validator);
-                long startTime = System.currentTimeMillis();
-                int amount = 30000;
-                for (int i = 0; i < 10; i++) {
-                    executorService.submit(new GenerateThread(generator, amount, password, url, user, sql));
+                watch.start();
+                int amount = 300000;
+                for (int i = 0; i < numberThreads; i++) {
+                    executorService.submit(new GenerateThread(generator, amount / numberThreads, password, url, user, sql));
                 }
                 executorService.shutdown();
                 while (true) {
                     if (executorService.isTerminated()) {
-                        long endTime = System.currentTimeMillis();
-                        double elapsedSeconds = (endTime - startTime) / 1000.0;
-                        double messagesPerSecond = 300000 / elapsedSeconds;
-                        logger.info("RECEIVING SPEED in 10 threads: {} messages per second, total = {} messages, elapseSeconds = {}",
-                                messagesPerSecond, 300000, elapsedSeconds);
-
+                        watch.stop();
+                        double elapsedSeconds = watch.getTime() / 1000.0;
+                        double messagesPerSecond = amount / elapsedSeconds;
+                        logger.info("RECEIVING SPEED in {} threads: {} messages per second, total = {} messages, elapseSeconds = {}"
+                                , numberThreads, messagesPerSecond, amount, elapsedSeconds);
+                        watch.reset();
+                        watch.start();
                         SqlExecute.executeSqlScript(url, user, password, "dmlCommandForFillingTable.sql");
-
+                        watch.stop();
+                        logger.info("Filling products to stores= " + watch.getTime() / 1000.0);
+                        watch.reset();
                         Scanner scanner = new Scanner(System.in);
                         String productType = "";
                         while (!productType.equals("стоп")) {
-                            System.out.print("Введіть тип товару: ");
+                            logger.info("Введіть тип товару: ");
                             productType = scanner.nextLine();
+                            watch.start();
                             SqlExecute.executeQuerySqlScript(url, user, password, "sqlCommandsToExecute.sql", productType);
+                            watch.stop();
+                            logger.info("Search store time= " + watch.getTime() / 1000.0);
+                            watch.reset();
                         }
                         scanner.close();
                         return;
