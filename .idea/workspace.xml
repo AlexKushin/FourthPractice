@@ -4,12 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ace0e323-7ca4-4586-8abc-a463354e5c92" name="Changes" comment="first commit third practice">
+    <list default="true" id="ace0e323-7ca4-4586-8abc-a463354e5c92" name="Changes" comment="commit before merge, pom was changed">
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ddlScriptForDataBaseCreating.sql" beforeDir="false" afterPath="$PROJECT_DIR$/ddlScriptForDataBaseCreating.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/shpp/mentoring/okushin/task4/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/shpp/mentoring/okushin/task4/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/shpp/mentoring/okushin/task4/CsvImporter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/shpp/mentoring/okushin/task4/CsvImporter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/shpp/mentoring/okushin/task4/SqlExecute.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/shpp/mentoring/okushin/task4/SqlExecute.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ddlScriptForDataBaseCreating.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/ddlScriptForDataBaseCreating.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dmlCommandForFillingTable.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/dmlCommandForFillingTable.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sqlCommandsToExecute.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/sqlCommandsToExecute.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,15 +55,20 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
     "WebServerToolWindowFactoryState": "false",
     "extract.method.default.visibility": "private",
     "git-widget-placeholder": "develop",
-    "last_opened_file_path": "C:/workspace/thirdPractice",
+    "last_opened_file_path": "C:/workspace/FourthPractice",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "reference.settings.ide.settings.uml",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "spring.configuration.checksum": "7d236c71d42bbe5f16806bb8de406b8f",
     "vue.rearranger.settings.migration": "true"
   },
@@ -77,8 +83,12 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\workspace\FourthPractice" />
       <recent name="C:\workspace\FourthPractice\src\main\java\com\shpp\mentoring\okushin\task4" />
       <recent name="C:\workspace\FourthPractice\src\main\java" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\workspace\FourthPractice\src\main\resources" />
     </key>
   </component>
   <component name="RunManager" selected="Application.App">
@@ -121,7 +131,8 @@
       <workItem from="1681341689787" duration="25895000" />
       <workItem from="1681555652207" duration="1140000" />
       <workItem from="1681556871711" duration="25728000" />
-      <workItem from="1681823211095" duration="44292000" />
+      <workItem from="1681823211095" duration="47230000" />
+      <workItem from="1682160229569" duration="3911000" />
     </task>
     <task id="LOCAL-00001" summary="first commit third practice">
       <created>1682032657538</created>
@@ -130,7 +141,21 @@
       <option name="project" value="LOCAL" />
       <updated>1682032657538</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="sout was replaced with logger messages">
+      <created>1682159618945</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1682159618945</updated>
+    </task>
+    <task id="LOCAL-00003" summary="commit before merge, pom was changed">
+      <created>1682165210997</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1682165210997</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -138,7 +163,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="first commit third practice" />
-    <option name="LAST_COMMIT_MESSAGE" value="first commit third practice" />
+    <MESSAGE value="sout was replaced with logger messages" />
+    <MESSAGE value="commit before merge, pom was changed" />
+    <option name="LAST_COMMIT_MESSAGE" value="commit before merge, pom was changed" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
