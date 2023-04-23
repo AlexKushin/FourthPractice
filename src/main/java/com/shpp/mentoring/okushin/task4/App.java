@@ -19,24 +19,21 @@ public class App {
     private static final Logger logger = LoggerFactory.getLogger(App.class);
 
     public static void main(String[] args) {
-       // String url = "jdbc:postgresql://localhost:5432/epicentr_repo";
-        String url = "jdbc:postgresql://epicentr-repo.crw51pyylhbt.us-east-1.rds.amazonaws.com:5432/";
+        //String url = "jdbc:postgresql://localhost:5432/epicentr_repo";
+          String url = "jdbc:postgresql://epicentr-repo.crw51pyylhbt.us-east-1.rds.amazonaws.com:5432/";
         String user = "postgres";
         String password = "1234password4321";
         StopWatch watch = new StopWatch();
         try {
             SqlExecute.executeSqlScript(url, user, password, "ddlScriptForDataBaseCreating.sql");
-           // SqlExecute.executeSqlCommand(url, user, password, "ALTER DATABASE epicentr_repo SET bytea_output = 'escape'");
-            //SqlExecute.executeSqlCommand(url, user, password, "ALTER DATABASE epicentr_repo SET client_encoding = 'UTF8'");
 
             CsvImporter.importToDB(url, user, password,
                     "stores.csv", "availability_goods.stores");
             CsvImporter.importToDB(url, user, password,
                     "types.csv", "availability_goods.types");
-            //    SqlExecute.executeSqlCommand(url, user, password, "CREATE INDEX indexType ON availability_goods.types (id);");
-            int storesCount = SqlExecute.executeQuerySqlScript(url, user, password, "SELECT count(*) from availability_goods.stores;");
 
-            int typesCount = SqlExecute.executeQuerySqlScript(url, user, password, "SELECT count(*) from availability_goods.types;");
+            //int storesCount = SqlExecute.executeQuerySqlScript(url, user, password, "SELECT count(*) from availability_goods.stores;");
+
 
             int numberThreads = 10;
             ExecutorService executorService = Executors.newFixedThreadPool(numberThreads);
@@ -62,7 +59,7 @@ public class App {
                         watch.stop();
                         double elapsedSeconds = watch.getTime() / 1000.0;
                         double messagesPerSecond = amount / elapsedSeconds;
-                        logger.info("RECEIVING SPEED in {} threads: {} messages per second, total = {} messages, elapseSeconds = {}"
+                        logger.info("GENERATING SPEED by {} threads: {} , total = {} messages, elapseSeconds = {}"
                                 , numberThreads, messagesPerSecond, amount, elapsedSeconds);
                         watch.reset();
                         watch.start();
@@ -70,9 +67,11 @@ public class App {
                         watch.stop();
                         logger.info("filling stores speed with products= {}", watch.getTime() / 1000.0);
                         watch.reset();
+                        System.setProperty("file.encoding", "UTF-8");
+                        String productType = System.getProperty("productType");
+                        productType = new String(productType.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
 
-                        String property = System.getProperty("productType");
-                        String productType = new String(property.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+
                         watch.start();
                         SqlExecute.executeQuerySqlScript(url, user, password, "sqlCommandsToExecute.sql", productType);
                         watch.stop();
@@ -84,8 +83,7 @@ public class App {
                     }
                 }
             }
-        } catch (
-                SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }

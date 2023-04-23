@@ -11,6 +11,7 @@ import java.sql.*;
 
 public class SqlExecute {
     private static final Logger logger = LoggerFactory.getLogger(SqlExecute.class);
+
     public static void executeSqlScript(String jdbcURL, String username, String password, String sqlFilePath) throws SQLException {
         try (Connection conn = DriverManager.getConnection(jdbcURL, username, password); Statement stmt = conn.createStatement()) {
             String[] commands = readSqlCommandFromFile(sqlFilePath).split(";");
@@ -39,23 +40,19 @@ public class SqlExecute {
             ResultSetMetaData resultSetMetaData = res.getMetaData();
             while (res.next()) {
                 for (int i = 1; i < resultSetMetaData.getColumnCount(); i++) {
-                    if (i > 1) {
-                        System.out.print(", ");
-                    }
                     String result = res.getString(i);
-                    System.out.print(result + " " + resultSetMetaData.getColumnName(i));
+                    logger.info("{}: {}", resultSetMetaData.getColumnName(i), result);
                 }
-                System.out.println();
             }
             logger.info("DDL commands executed successfully");
         } catch (Exception e) {
-            logger.error("Error executing DDL commands: " + e.getMessage());
+            logger.error("Error executing DDL commands: {}", e.getMessage());
         }
     }
 
     public static int executeQuerySqlScript(String jdbcURL, String username, String password, String query) throws SQLException {
-        try (Connection conn = DriverManager.getConnection(jdbcURL, username, password)) {
-            Statement statement = conn.createStatement();
+        try (Connection conn = DriverManager.getConnection(jdbcURL, username, password);
+             Statement statement = conn.createStatement()) {
             ResultSet res = statement.executeQuery(query);
             int count = 0;
             while (res.next()) {
@@ -66,14 +63,14 @@ public class SqlExecute {
     }
 
     private static String readSqlCommandFromFile(String sqlFilePath) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(sqlFilePath));
-        String line;
-        StringBuilder sb = new StringBuilder();
-        while ((line = br.readLine()) != null) {
-            sb.append(line);
-            sb.append(" ");
+        try (BufferedReader br = new BufferedReader(new FileReader(sqlFilePath))) {
+            String line;
+            StringBuilder sb = new StringBuilder();
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+                sb.append(" ");
+            }
+            return sb.toString();
         }
-        br.close();
-        return sb.toString();
     }
 }

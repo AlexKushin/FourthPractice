@@ -54,7 +54,7 @@ public class ProductGenerator {
         long endTime = System.currentTimeMillis();
         double elapsedSeconds = (endTime - startTime) / 1000.0;
         double messagesPerSecond = totalQuantity.get() / elapsedSeconds;
-        logger.info("RECEIVING SPEED: {} messages per second, total = {} messages, elapseSeconds = {}",
+        logger.info("GENERATING SPEED: {} , total = {} messages, elapseSeconds = {}",
                 messagesPerSecond, totalQuantity.get(), elapsedSeconds);
     }
 }
