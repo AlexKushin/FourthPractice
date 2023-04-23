@@ -19,14 +19,15 @@ public class App {
     private static final Logger logger = LoggerFactory.getLogger(App.class);
 
     public static void main(String[] args) {
-        String url = "jdbc:postgresql://localhost:5432/epicentr_repo";
+       // String url = "jdbc:postgresql://localhost:5432/epicentr_repo";
+        String url = "jdbc:postgresql://localhost:5432/epicentr-repo.crw51pyylhbt.us-east-1.rds.amazonaws.com";
         String user = "postgres";
         String password = "1234password4321";
         StopWatch watch = new StopWatch();
         try {
             SqlExecute.executeSqlScript(url, user, password, "ddlScriptForDataBaseCreating.sql");
-            SqlExecute.executeSqlCommand(url, user, password, "ALTER DATABASE epicentr_repo SET bytea_output = 'escape'");
-            SqlExecute.executeSqlCommand(url, user, password, "ALTER DATABASE epicentr_repo SET client_encoding = 'UTF8'");
+            SqlExecute.executeSqlCommand(url, user, password, "ALTER DATABASE epicentr-repo SET bytea_output = 'escape'");
+            SqlExecute.executeSqlCommand(url, user, password, "ALTER DATABASE epicentr-repo SET client_encoding = 'UTF8'");
 
             CsvImporter.importToDB(url, user, password,
                     "stores.csv", "availability_goods.stores");
