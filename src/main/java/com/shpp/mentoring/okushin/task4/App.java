@@ -49,7 +49,7 @@ public class App {
                 Validator validator = factory.getValidator();
                 ProductGenerator generator = new ProductGenerator(validator);
                 watch.start();
-                int amount = 300000;
+                int amount = 3000000;
                 for (int i = 0; i < numberThreads; i++) {
                     executorService.submit(new GenerateThread(generator, amount / numberThreads, password, url, user, sql));
                 }
@@ -77,8 +77,6 @@ public class App {
                         watch.stop();
                         logger.info("Search store time= {}", watch.getTime() / 1000.0);
                         watch.reset();
-
-
                         return;
                     }
                 }
