@@ -26,8 +26,8 @@ public class App {
         StopWatch watch = new StopWatch();
         try {
             SqlExecute.executeSqlScript(url, user, password, "ddlScriptForDataBaseCreating.sql");
-            SqlExecute.executeSqlCommand(url, user, password, "ALTER DATABASE epicentr-repo SET bytea_output = 'escape'");
-            SqlExecute.executeSqlCommand(url, user, password, "ALTER DATABASE epicentr-repo SET client_encoding = 'UTF8'");
+           // SqlExecute.executeSqlCommand(url, user, password, "ALTER DATABASE epicentr_repo SET bytea_output = 'escape'");
+            //SqlExecute.executeSqlCommand(url, user, password, "ALTER DATABASE epicentr_repo SET client_encoding = 'UTF8'");
 
             CsvImporter.importToDB(url, user, password,
                     "stores.csv", "availability_goods.stores");

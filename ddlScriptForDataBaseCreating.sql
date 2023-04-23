@@ -1,7 +1,9 @@
+DROP SCHEMA IF EXISTS availability_goods CASCADE;
 DROP TABLE IF EXISTS epicentr_repo.availability_goods.types CASCADE;
 DROP TABLE IF EXISTS epicentr_repo.availability_goods.stores CASCADE;
 DROP TABLE IF EXISTS epicentr_repo.availability_goods.products CASCADE;
 DROP TABLE IF EXISTS epicentr_repo.availability_goods.quantity_in_store;
+CREATE SCHEMA availability_goods;
 CREATE TABLE IF NOT EXISTS availability_goods.stores
 (
     id    SERIAL PRIMARY KEY,
