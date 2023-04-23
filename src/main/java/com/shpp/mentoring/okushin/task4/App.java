@@ -7,11 +7,8 @@ import org.slf4j.LoggerFactory;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -37,9 +34,9 @@ public class App {
                     "types.csv", "availability_goods.types");
             //    SqlExecute.executeSqlCommand(url, user, password, "CREATE INDEX indexType ON availability_goods.types (id);");
             int storesCount = SqlExecute.executeQuerySqlScript(url, user, password, "SELECT count(*) from availability_goods.stores;");
-            // System.out.println(storesCount);
+
             int typesCount = SqlExecute.executeQuerySqlScript(url, user, password, "SELECT count(*) from availability_goods.types;");
-            //System.out.println(typesCount);
+
             int numberThreads = 10;
             ExecutorService executorService = Executors.newFixedThreadPool(numberThreads);
 
