@@ -7,18 +7,18 @@ CREATE SCHEMA availability_goods;
 CREATE TABLE IF NOT EXISTS availability_goods.stores
 (
     id    SERIAL PRIMARY KEY,
-    store VARCHAR(100) NOT NULL
+    store VARCHAR(60) NOT NULL
 );
 CREATE TABLE IF NOT EXISTS availability_goods.types
 (
     id   SERIAL PRIMARY KEY,
-    producttype VARCHAR(70) NOT NULL
+    producttype VARCHAR(25) NOT NULL
 );
 CREATE TABLE IF NOT EXISTS availability_goods.products
 (
     id           SERIAL PRIMARY KEY,
     type_id      INT NOT NULL,
-    product_name VARCHAR(70),
+    product_name VARCHAR(25),
     FOREIGN KEY (type_id) REFERENCES availability_goods.types (id)
 );
 CREATE TABLE IF NOT EXISTS availability_goods.quantity_in_store
