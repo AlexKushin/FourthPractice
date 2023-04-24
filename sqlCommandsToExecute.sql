@@ -10,3 +10,7 @@ WHERE products.type_id = types.id
 GROUP BY types.producttype, stores.store
 ORDER BY tot_type desc LIMIT 1;
 
+
+
+
+

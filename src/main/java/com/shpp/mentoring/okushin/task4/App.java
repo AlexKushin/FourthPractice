@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -19,7 +18,7 @@ public class App {
     private static final Logger logger = LoggerFactory.getLogger(App.class);
 
     public static void main(String[] args) {
-        //String url = "jdbc:postgresql://localhost:5432/epicentr_repo";
+       // String url = "jdbc:postgresql://localhost:5432/epicentr_repo";
         String url = "jdbc:postgresql://epicentr-repo.crw51pyylhbt.us-east-1.rds.amazonaws.com:5432/";
         String user = "postgres";
         String password = "1234password4321";
@@ -31,7 +30,7 @@ public class App {
                     "stores.csv", "availability_goods.stores");
             CsvImporter.importToDB(url, user, password,
                     "types.csv", "availability_goods.types");
-           SqlExecute.executeSqlCommand(url,user,password,"CREATE INDEX typeIndex ON  availability_goods.types (producttype)");
+            //SqlExecute.executeSqlCommand(url,user,password,"CREATE INDEX typeIndex ON  availability_goods.types (producttype)");
 
             //int storesCount = SqlExecute.executeQuerySqlScript(url, user, password, "SELECT count(*) from availability_goods.stores;");
 
@@ -63,11 +62,15 @@ public class App {
                         logger.info("GENERATING SPEED by {} threads: {} , total = {} messages, elapseSeconds = {}"
                                 , numberThreads, messagesPerSecond, amount, elapsedSeconds);
                         watch.reset();
+
+
                         watch.start();
                         SqlExecute.executeSqlScript(url, user, password, "dmlCommandForFillingTable.sql");
                         watch.stop();
                         logger.info("filling stores speed with products= {}", watch.getTime() / 1000.0);
                         watch.reset();
+                        SqlExecute.executeSqlCommand(url, user, password, "CREATE INDEX  ON  availability_goods.products (type_id)");
+                        SqlExecute.executeSqlCommand(url, user, password, "CREATE INDEX  ON  availability_goods.quantity_in_store (product_id,store_id)");
                         //System.setProperty("file.encoding", "UTF-8");
                         String productType = System.getProperty("productType");
                         //productType = new String(productType.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
