@@ -31,7 +31,7 @@ public class App {
                     "stores.csv", "availability_goods.stores");
             CsvImporter.importToDB(url, user, password,
                     "types.csv", "availability_goods.types");
-           // SqlExecute.executeSqlCommand(url,user,password,"CREATE INDEX typeIndex ON  availability_goods.types (LOWER(producttype))");
+           SqlExecute.executeSqlCommand(url,user,password,"CREATE INDEX typeIndex ON  availability_goods.types (producttype)");
 
             //int storesCount = SqlExecute.executeQuerySqlScript(url, user, password, "SELECT count(*) from availability_goods.stores;");
 
