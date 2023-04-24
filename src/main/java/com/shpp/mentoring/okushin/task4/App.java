@@ -19,8 +19,8 @@ public class App {
     private static final Logger logger = LoggerFactory.getLogger(App.class);
 
     public static void main(String[] args) {
-        String url = "jdbc:postgresql://localhost:5432/epicentr_repo";
-          //String url = "jdbc:postgresql://epicentr-repo.crw51pyylhbt.us-east-1.rds.amazonaws.com:5432/";
+        //String url = "jdbc:postgresql://localhost:5432/epicentr_repo";
+          String url = "jdbc:postgresql://epicentr-repo.crw51pyylhbt.us-east-1.rds.amazonaws.com:5432/";
         String user = "postgres";
         String password = "1234password4321";
         StopWatch watch = new StopWatch();
