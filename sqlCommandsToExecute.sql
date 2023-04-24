@@ -6,7 +6,7 @@ FROM availability_goods.stores,
 WHERE products.type_id = types.id
   and stores.id = quantity_in_store.store_id
   and quantity_in_store.product_id = products.id
-  and LOWER (types.producttype) = ?
+  and (types.producttype) = ?
 GROUP BY types.producttype, stores.store
 ORDER BY tot_type desc LIMIT 1;
 

@@ -20,7 +20,7 @@ public class App {
 
     public static void main(String[] args) {
         //String url = "jdbc:postgresql://localhost:5432/epicentr_repo";
-          String url = "jdbc:postgresql://epicentr-repo.crw51pyylhbt.us-east-1.rds.amazonaws.com:5432/";
+        String url = "jdbc:postgresql://epicentr-repo.crw51pyylhbt.us-east-1.rds.amazonaws.com:5432/";
         String user = "postgres";
         String password = "1234password4321";
         StopWatch watch = new StopWatch();
@@ -31,6 +31,7 @@ public class App {
                     "stores.csv", "availability_goods.stores");
             CsvImporter.importToDB(url, user, password,
                     "types.csv", "availability_goods.types");
+           // SqlExecute.executeSqlCommand(url,user,password,"CREATE INDEX typeIndex ON  availability_goods.types (LOWER(producttype))");
 
             //int storesCount = SqlExecute.executeQuerySqlScript(url, user, password, "SELECT count(*) from availability_goods.stores;");
 
@@ -49,7 +50,7 @@ public class App {
                 Validator validator = factory.getValidator();
                 ProductGenerator generator = new ProductGenerator(validator);
                 watch.start();
-                int amount = 300000;
+                int amount = 3000000;
                 for (int i = 0; i < numberThreads; i++) {
                     executorService.submit(new GenerateThread(generator, amount / numberThreads, password, url, user, sql));
                 }
