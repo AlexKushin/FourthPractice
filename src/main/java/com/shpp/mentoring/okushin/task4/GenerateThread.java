@@ -8,7 +8,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class GenerateThread extends Thread {
+public class GenerateThread implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(GenerateThread.class);
     ProductGenerator productGenerator;
     int amount;

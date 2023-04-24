@@ -19,8 +19,8 @@ public class App {
     private static final Logger logger = LoggerFactory.getLogger(App.class);
 
     public static void main(String[] args) {
-        //String url = "jdbc:postgresql://localhost:5432/epicentr_repo";
-          String url = "jdbc:postgresql://epicentr-repo.crw51pyylhbt.us-east-1.rds.amazonaws.com:5432/";
+        String url = "jdbc:postgresql://localhost:5432/epicentr_repo";
+          //String url = "jdbc:postgresql://epicentr-repo.crw51pyylhbt.us-east-1.rds.amazonaws.com:5432/";
         String user = "postgres";
         String password = "1234password4321";
         StopWatch watch = new StopWatch();
@@ -49,7 +49,7 @@ public class App {
                 Validator validator = factory.getValidator();
                 ProductGenerator generator = new ProductGenerator(validator);
                 watch.start();
-                int amount = 3000000;
+                int amount = 300000;
                 for (int i = 0; i < numberThreads; i++) {
                     executorService.submit(new GenerateThread(generator, amount / numberThreads, password, url, user, sql));
                 }
@@ -67,9 +67,9 @@ public class App {
                         watch.stop();
                         logger.info("filling stores speed with products= {}", watch.getTime() / 1000.0);
                         watch.reset();
-                        System.setProperty("file.encoding", "UTF-8");
+                        //System.setProperty("file.encoding", "UTF-8");
                         String productType = System.getProperty("productType");
-                        productType = new String(productType.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                        //productType = new String(productType.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
 
 
                         watch.start();

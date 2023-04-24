@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -20,7 +22,7 @@ public class CsvImporter {
     public static void importToDB(String jdbcURL, String username, String password, String csvFilePath, String tableName) {
 
         try (Connection connection = DriverManager.getConnection(jdbcURL, username, password);
-             CSVReader reader = new CSVReader(new FileReader(csvFilePath))) {
+             CSVReader reader = new CSVReader(new FileReader(csvFilePath, StandardCharsets.UTF_8))) {
 
             String[] nextLine;
 
