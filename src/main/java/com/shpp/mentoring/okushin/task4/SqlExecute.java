@@ -1,5 +1,6 @@
 package com.shpp.mentoring.okushin.task4;
 
+import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +37,12 @@ public class SqlExecute {
     public static void executeQuerySqlScript(String jdbcURL, String username, String password, String sqlFilePath, String productType) throws SQLException {
         try (Connection conn = DriverManager.getConnection(jdbcURL, username, password); PreparedStatement stmt = conn.prepareStatement(readSqlCommandFromFile(sqlFilePath))) {
             stmt.setString(1, productType.toLowerCase());
+            StopWatch watch = new StopWatch();
+            watch.start();
             ResultSet res = stmt.executeQuery();
+            watch.stop();
+            logger.info("2Searching store speed = {}", watch.getTime() / 1000.0);
+            watch.reset();
             ResultSetMetaData resultSetMetaData = res.getMetaData();
             while (res.next()) {
                 for (int i = 1; i < resultSetMetaData.getColumnCount(); i++) {
