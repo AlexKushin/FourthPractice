@@ -1,13 +1,18 @@
 package com.shpp.mentoring.okushin.task4;
 
+import com.shpp.mentoring.okushin.task3.PropertyManager;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.sql.DataSource;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -17,41 +22,37 @@ import java.util.concurrent.Executors;
 public class App {
     private static final Logger logger = LoggerFactory.getLogger(App.class);
 
-    public static void main(String[] args) {
-       //String url = "jdbc:postgresql://localhost:5432/epicentr_repo";
-        String url = "jdbc:postgresql://epicentr-repo.crw51pyylhbt.us-east-1.rds.amazonaws.com:5432/";
-        String user = "postgres";
-        String password = "1234password4321";
+    public static void main(String[] args) throws SQLException {
+
         StopWatch watch = new StopWatch();
+        Properties prop = new Properties();
+        PropertyManager.readPropertyFile("application.properties", prop);
+        HikariConfig config = new HikariConfig(prop);
+        DataSource dataSource = new HikariDataSource(config);
+
         try {
-            SqlExecute.executeSqlScript(url, user, password, "ddlScriptForDataBaseCreating.sql");
 
-            CsvImporter.importToDB(url, user, password,
+           SqlExecute.executeSqlScript(dataSource.getConnection(), "ddlScriptForDataBaseCreating.sql");
+
+            CsvImporter.importToDB(dataSource.getConnection(),
                     "stores.csv", "availability_goods.stores");
-            CsvImporter.importToDB(url, user, password,
+            CsvImporter.importToDB(dataSource.getConnection(),
                     "types.csv", "availability_goods.types");
-            //SqlExecute.executeSqlCommand(url,user,password,"CREATE INDEX typeIndex ON  availability_goods.types (producttype)");
-
-            //int storesCount = SqlExecute.executeQuerySqlScript(url, user, password, "SELECT count(*) from availability_goods.stores;");
-
 
             int numberThreads = 10;
             ExecutorService executorService = Executors.newFixedThreadPool(numberThreads);
 
-            StringBuilder sqlBuilder = new StringBuilder("INSERT INTO availability_goods.products (type_id,product_name) VALUES");
-            for (int i = 0; i < 999; i++) {
-                sqlBuilder.append(" (CAST(? AS INTEGER), ? ), ");
-            }
-            sqlBuilder.append("(CAST(? AS INTEGER), ? )");
-            String sql = sqlBuilder.toString();
+            String sql = "INSERT INTO availability_goods.products (type_id,product_name) VALUES" + " (CAST(? AS INTEGER), ? ), ".repeat(999) +
+                    "(CAST(? AS INTEGER), ? )";
 
             try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
                 Validator validator = factory.getValidator();
+                int typesCount = SqlExecute.executeQuerySqlScript(dataSource.getConnection(), "SELECT count(*) from availability_goods.types;");
                 ProductGenerator generator = new ProductGenerator(validator);
                 watch.start();
                 int amount = 3000000;
                 for (int i = 0; i < numberThreads; i++) {
-                    executorService.submit(new GenerateThread(generator, amount / numberThreads, password, url, user, sql));
+                    executorService.submit(new GenerateThread(generator, amount / numberThreads, sql,  dataSource.getConnection(),typesCount));
                 }
                 executorService.shutdown();
                 while (true) {
@@ -65,19 +66,19 @@ public class App {
 
 
                         watch.start();
-                        SqlExecute.executeSqlScript(url, user, password, "dmlCommandForFillingTable.sql");
+                        SqlExecute.executeSqlScript(dataSource.getConnection(), "dmlCommandForFillingTable.sql");
                         watch.stop();
                         logger.info("filling stores speed with products= {}", watch.getTime() / 1000.0);
                         watch.reset();
-                        SqlExecute.executeSqlCommand(url, user, password, "CREATE INDEX  ON  availability_goods.products (type_id)");
-                        SqlExecute.executeSqlCommand(url, user, password, "CREATE INDEX  ON  availability_goods.quantity_in_store (product_id,store_id)");
+                        SqlExecute.executeSqlCommand(dataSource.getConnection(), "CREATE INDEX  ON  availability_goods.products (type_id)");
+                        SqlExecute.executeSqlCommand(dataSource.getConnection(), "CREATE INDEX  ON  availability_goods.quantity_in_store (product_id,store_id)");
                         //System.setProperty("file.encoding", "UTF-8");
                         String productType = System.getProperty("productType");
                         //productType = new String(productType.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
 
 
                         watch.start();
-                        SqlExecute.executeQuerySqlScript(url, user, password, "sqlCommandsToExecute.sql", productType);
+                        SqlExecute.executeQuerySqlScript(dataSource.getConnection(), "sqlCommandsToExecute.sql", productType);
                         watch.stop();
                         logger.info("Search store time= {}", watch.getTime() / 1000.0);
                         watch.reset();
@@ -88,6 +89,8 @@ public class App {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+
     }
 }
 

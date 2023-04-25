@@ -3,6 +3,7 @@ package com.shpp.mentoring.okushin.task4;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,29 +14,31 @@ public class GenerateThread implements Runnable {
     ProductGenerator productGenerator;
     int amount;
 
-    private final String password;
-    private final String url;
-    private final String user;
-    private final String sql;
 
-    public GenerateThread(ProductGenerator productGenerator, int amount, String password, String url, String user, String sql) {
+    private final String sql;
+private final Connection connection;
+
+    private final int typesCount;
+
+    public GenerateThread(ProductGenerator productGenerator, int amount, String sql, Connection connection, int typesCount) {
         this.productGenerator = productGenerator;
         this.amount = amount;
-        this.password = password;
-        this.url = url;
-        this.user = user;
         this.sql = sql;
+        this.connection = connection;
+
+        this.typesCount = typesCount;
     }
 
 
     @Override
     public void run() {
         try {
-            int typesCount = SqlExecute.executeQuerySqlScript(url, user, password, "SELECT count(*) from availability_goods.types;");
-            Connection connection = DriverManager.getConnection(url, user, password);
+
+            //Connection connection = DriverManager.getConnection(url, user, password);
+
             PreparedStatement statement = connection.prepareStatement(sql);
             connection.setAutoCommit(false);
-            productGenerator.insertValidatedProducts(statement, amount,typesCount);
+            productGenerator.insertValidatedProducts(statement, amount, typesCount);
             statement.executeBatch();
             connection.commit();
             connection.close();

@@ -19,10 +19,9 @@ public class CsvImporter {
 
     private static final Logger logger = LoggerFactory.getLogger(CsvImporter.class);
 
-    public static void importToDB(String jdbcURL, String username, String password, String csvFilePath, String tableName) {
+    public static void importToDB(Connection connection, String csvFilePath, String tableName) {
 
-        try (Connection connection = DriverManager.getConnection(jdbcURL, username, password);
-             CSVReader reader = new CSVReader(new FileReader(csvFilePath, StandardCharsets.UTF_8))) {
+        try (CSVReader reader = new CSVReader(new FileReader(csvFilePath, StandardCharsets.UTF_8))) {
 
             String[] nextLine;
 
@@ -55,7 +54,9 @@ public class CsvImporter {
                         statement.setString(i + 1, nextLine[i]);
                     }
                     statement.executeUpdate();
+
                 }
+                connection.close();
                 logger.info("Data was successfully imported");
             }
 
