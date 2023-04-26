@@ -36,10 +36,10 @@ private final Connection connection;
 
             //Connection connection = DriverManager.getConnection(url, user, password);
 
-            PreparedStatement statement = connection.prepareStatement(sql);
+            //PreparedStatement statement = connection.prepareStatement(sql);
             connection.setAutoCommit(false);
-            productGenerator.insertValidatedProducts(statement, amount, typesCount);
-            statement.executeBatch();
+            productGenerator.insertValidatedProducts(connection, amount, typesCount,sql);
+            //statement.executeBatch();
             connection.commit();
             connection.close();
         } catch (SQLException e) {

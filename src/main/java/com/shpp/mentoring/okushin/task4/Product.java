@@ -8,14 +8,14 @@ public class Product {
     //@Pattern(regexp = ".*a.*") //hard
     String name;
     @Min(1)
-    @Max(17)
+    @Max(120)
     int typeId;
-    String description;
 
-    public Product(String name, int typeId, String description) {
+
+    public Product(String name, int typeId) {
         this.name = name;
         this.typeId = typeId;
-        this.description = description;
+
     }
 
     public String getName() {
@@ -35,11 +35,5 @@ public class Product {
     }
 
 
-    public String getDescription() {
-        return description;
-    }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }

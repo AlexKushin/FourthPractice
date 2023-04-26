@@ -23,7 +23,8 @@ public class App {
     private static final Logger logger = LoggerFactory.getLogger(App.class);
 
     public static void main(String[] args) throws SQLException {
-
+        //String url = "jdbc:postgresql://epicentr-repo.crw51pyylhbt.us-east-1.rds.amazonaws.com:5432/";
+        //String jdbcUrl="jdbc:postgresql://localhost:5432/epicentr_repo"
         StopWatch watch = new StopWatch();
         Properties prop = new Properties();
         PropertyManager.readPropertyFile("application.properties", prop);
@@ -48,6 +49,7 @@ public class App {
             try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
                 Validator validator = factory.getValidator();
                 int typesCount = SqlExecute.executeQuerySqlScript(dataSource.getConnection(), "SELECT count(*) from availability_goods.types;");
+                int storesCount = SqlExecute.executeQuerySqlScript(dataSource.getConnection(), "SELECT count(*) from availability_goods.stores;");
                 ProductGenerator generator = new ProductGenerator(validator);
                 watch.start();
                 int amount = 3000000;
@@ -66,12 +68,13 @@ public class App {
 
 
                         watch.start();
-                        SqlExecute.executeSqlScript(dataSource.getConnection(), "dmlCommandForFillingTable.sql");
+                      //  SqlExecute.executeSqlScript(dataSource.getConnection(), "dmlCommandForFillingTable.sql");
+                        SqlExecute.executeSqlPreparedStatement(dataSource.getConnection(), "dmlCommandForFillingTable.sql", storesCount);
                         watch.stop();
                         logger.info("filling stores speed with products= {}", watch.getTime() / 1000.0);
                         watch.reset();
-                        SqlExecute.executeSqlCommand(dataSource.getConnection(), "CREATE INDEX  ON  availability_goods.products (type_id)");
-                        SqlExecute.executeSqlCommand(dataSource.getConnection(), "CREATE INDEX  ON  availability_goods.quantity_in_store (product_id,store_id)");
+                        SqlExecute.executeSqlStatement(dataSource.getConnection(), "CREATE INDEX  ON  availability_goods.products (type_id)");
+                        SqlExecute.executeSqlStatement(dataSource.getConnection(), "CREATE INDEX  ON  availability_goods.quantity_in_store (product_id,store_id)");
                         //System.setProperty("file.encoding", "UTF-8");
                         String productType = System.getProperty("productType");
                         //productType = new String(productType.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);

@@ -4,7 +4,6 @@ import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.sql.DataSource;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -28,12 +27,20 @@ public class SqlExecute {
         }
     }
 
-    public static void executeSqlCommand(Connection connection, String sqlCommand) throws SQLException {
+    public static void executeSqlStatement(Connection connection, String sqlCommand) throws SQLException {
         try (Statement stmt = connection.createStatement()) {
-
             stmt.executeUpdate(sqlCommand);
             connection.close();
             logger.info("DDL commands executed successfully");
+        }
+    }public static void executeSqlPreparedStatement(Connection connection, String sqlFilePath, int intParam) throws SQLException {
+        try (PreparedStatement stmt = connection.prepareStatement(readSqlCommandFromFile(sqlFilePath))) {
+            stmt.setInt(1, intParam);
+            stmt.executeUpdate();
+            connection.close();
+            logger.info("DDL commands executed successfully");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
