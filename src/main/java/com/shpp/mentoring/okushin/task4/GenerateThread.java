@@ -42,6 +42,7 @@ private final Connection connection;
             //statement.executeBatch();
             connection.commit();
             connection.close();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
