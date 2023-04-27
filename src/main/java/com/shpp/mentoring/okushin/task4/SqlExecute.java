@@ -68,8 +68,7 @@ public class SqlExecute {
     }
 
     public static int executeQuerySqlScript(Connection connection, String query) throws SQLException {
-        try (
-                Statement statement = connection.createStatement()) {
+        try (Statement statement = connection.createStatement()) {
             ResultSet res = statement.executeQuery(query);
             int count = 0;
             while (res.next()) {

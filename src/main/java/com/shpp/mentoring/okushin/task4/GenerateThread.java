@@ -3,10 +3,7 @@ package com.shpp.mentoring.okushin.task4;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class GenerateThread implements Runnable {
@@ -25,21 +22,16 @@ private final Connection connection;
         this.amount = amount;
         this.sql = sql;
         this.connection = connection;
-
         this.typesCount = typesCount;
     }
 
 
     @Override
     public void run() {
+       logger.info("Thread starts");
         try {
-
-            //Connection connection = DriverManager.getConnection(url, user, password);
-
-            //PreparedStatement statement = connection.prepareStatement(sql);
             connection.setAutoCommit(false);
             productGenerator.insertValidatedProducts(connection, amount, typesCount,sql);
-            //statement.executeBatch();
             connection.commit();
             connection.close();
 

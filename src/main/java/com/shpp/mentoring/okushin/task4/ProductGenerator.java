@@ -23,7 +23,6 @@ public class ProductGenerator {
 
     }
 
-  //  public void insertValidatedProducts(PreparedStatement statement, int amount,int typesCount) {
         public void insertValidatedProducts(Connection connection, int amount, int typesCount,String sql) throws SQLException {
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 final AtomicInteger totalQuantity = new AtomicInteger(0);
@@ -34,25 +33,17 @@ public class ProductGenerator {
                         .takeWhile(b -> totalQuantity.get() < amount)
                         .forEach(product -> {
                             try {
-                                // int batchCount = 0;
                                 if (validator.validate(product).isEmpty()) {
-
                                     statement.setString(prodCountForStatement.getAndIncrement(), String.valueOf(product.getTypeId()));
                                     statement.setString(prodCountForStatement.getAndIncrement(), String.valueOf(product.getName()));
                                     totalQuantity.incrementAndGet();
-                                    // System.out.println("1prodCountForStatement= "+prodCountForStatement.get());
                                     if (prodCountForStatement.get() > 2000) {
                                         statement.addBatch();
                                         batchCount.incrementAndGet();
-                                       // System.out.println("1batchCount= " + batchCount);
-                                       // System.out.println("2prodCountForStatement= " + prodCountForStatement.get());
                                         prodCountForStatement.set(1);
                                     }
                                     if (batchCount.get() >0 && batchCount.get() % 100 == 0) {
-                                     //   System.out.println("2batchCount= " + batchCount);
-                                        //  System.out.println("1000 prepStatements in batch, 1000 products in every statement");
                                         statement.executeBatch();
-                                     //   connection.commit();
                                     }
 
                                 }

@@ -22,7 +22,7 @@ import java.util.concurrent.Executors;
 public class App {
     private static final Logger logger = LoggerFactory.getLogger(App.class);
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
         //String url = "jdbc:postgresql://epicentr-repo.crw51pyylhbt.us-east-1.rds.amazonaws.com:5432/";
         //String jdbcUrl="jdbc:postgresql://localhost:5432/epicentr_repo"
 
@@ -61,9 +61,11 @@ public class App {
                 logger.info("Types number = {}", typesCount);
                 int storesCount = SqlExecute.executeQuerySqlScript(dataSource.getConnection(), "SELECT count(*) from availability_goods.stores;");
                 logger.info("Stores number = {}", storesCount);
+
                 ProductGenerator generator = new ProductGenerator(validator);
-                watch.start();
                 int amount = 3000000;
+
+                watch.start();
                 for (int i = 0; i < numberThreads; i++) {
                     executorService.submit(new GenerateThread(generator, amount / numberThreads, sql, dataSource.getConnection(), typesCount));
                 }
@@ -77,29 +79,27 @@ public class App {
                                 , numberThreads, messagesPerSecond, amount, elapsedSeconds);
                         watch.reset();
 
-
                         watch.start();
-                        //  SqlExecute.executeSqlScript(dataSource.getConnection(), "dmlCommandForFillingTable.sql");
                         SqlExecute.executeSqlPreparedStatement(dataSource.getConnection(), "dmlCommandForFillingTable.sql", storesCount);
                         watch.stop();
                         logger.info("filling stores speed with products= {}", watch.getTime() / 1000.0);
                         watch.reset();
+
                         watch.start();
                         SqlExecute.executeSqlStatement(dataSource.getConnection(), "CREATE INDEX  ON  availability_goods.products (type_id)");
                         SqlExecute.executeSqlStatement(dataSource.getConnection(), "CREATE INDEX  ON  availability_goods.quantity_in_store (product_id,store_id)");
                         watch.stop();
                         logger.info("Adding indexes time= {}", watch.getTime() / 1000.0);
                         watch.reset();
-                        //System.setProperty("file.encoding", "UTF-8");
-                        String productType = System.getProperty("productType");
-                        //productType = new String(productType.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
 
+                        String productType = System.getProperty("productType");
 
                         watch.start();
                         SqlExecute.executeQuerySqlScript(dataSource.getConnection(), "sqlCommandsToExecute.sql", productType);
                         watch.stop();
                         logger.info("Search store time= {}", watch.getTime() / 1000.0);
                         watch.reset();
+
                         return;
                     }
                 }
@@ -107,8 +107,6 @@ public class App {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 }
 
