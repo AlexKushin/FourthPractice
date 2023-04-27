@@ -25,6 +25,7 @@ public class App {
     public static void main(String[] args) throws SQLException {
         //String url = "jdbc:postgresql://epicentr-repo.crw51pyylhbt.us-east-1.rds.amazonaws.com:5432/";
         //String jdbcUrl="jdbc:postgresql://localhost:5432/epicentr_repo"
+        //i will have success
         StopWatch watch = new StopWatch();
         Properties prop = new Properties();
         PropertyManager.readPropertyFile("application.properties", prop);
