@@ -46,7 +46,9 @@ public class ProductGenerator {
                                     batchCount.incrementAndGet();
                                     prodCountForStatement.set(1);
                                 }
-                                if (batchCount.get() > 0 && batchCount.get() % 100 == 0) {
+                                int batchSize = 100;
+                                logger.info("batchSize = {}", batchSize);
+                                if (batchCount.get() > 0 && batchCount.get() % batchSize == 0) {
                                     statement.executeBatch();
                                 }
 
