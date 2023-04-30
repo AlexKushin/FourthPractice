@@ -27,8 +27,8 @@ public class App {
 
     public static void main(String[] args) {
 
-        //Frank String url = "jdbc:postgresql://epicentr-repo.cm8gtofqzkw2.eu-central-1.rds.amazonaws.com:5432/";
-        //String jdbcUrl="jdbc:postgresql://localhost:5432/epicentr_repo"
+        //AWS String url = "jdbc:postgresql://epicentr-repo.cm8gtofqzkw2.eu-central-1.rds.amazonaws.com:5432/";
+        //LocalDB String jdbcUrl="jdbc:postgresql://localhost:5432/epicentr_repo"
 
         //I will have success in the short term
         StopWatch watch = new StopWatch();
