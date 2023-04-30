@@ -15,8 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class CsvImporter {
-    private CsvImporter() {
-    }
+
 
     private static final Logger logger = LoggerFactory.getLogger(CsvImporter.class);
 

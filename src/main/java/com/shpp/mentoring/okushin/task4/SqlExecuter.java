@@ -12,8 +12,7 @@ import java.sql.*;
 
 
 public class SqlExecuter {
-    private SqlExecuter() {
-    }
+
 
     private static final Logger logger = LoggerFactory.getLogger(SqlExecuter.class);
 
