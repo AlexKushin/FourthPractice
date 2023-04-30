@@ -24,13 +24,12 @@ public class ProductGenerator {
         this.validator = validator;
 
     }
-
     public void insertValidatedProducts(Connection connection, int amount, int typesCount, String sql) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             final AtomicInteger totalQuantity = new AtomicInteger(0);
             final AtomicInteger prodCountForStatement = new AtomicInteger(1);
             final AtomicInteger batchCount = new AtomicInteger(0);
-            int batchSize = 100;
+            int batchSize = 1000;
 
             StopWatch watch = new StopWatch();
             watch.start();
