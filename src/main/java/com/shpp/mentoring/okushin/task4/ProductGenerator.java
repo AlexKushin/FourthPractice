@@ -29,7 +29,7 @@ public class ProductGenerator {
             final AtomicInteger totalQuantity = new AtomicInteger(0);
             final AtomicInteger prodCountForStatement = new AtomicInteger(1);
             final AtomicInteger batchCount = new AtomicInteger(0);
-            int batchSize = 30;
+            int batchSize = 50;
 
             StopWatch watch = new StopWatch();
             watch.start();
