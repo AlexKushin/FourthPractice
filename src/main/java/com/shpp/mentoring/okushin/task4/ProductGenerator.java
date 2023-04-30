@@ -30,6 +30,7 @@ public class ProductGenerator {
             final AtomicInteger totalQuantity = new AtomicInteger(0);
             final AtomicInteger prodCountForStatement = new AtomicInteger(1);
             final AtomicInteger batchCount = new AtomicInteger(0);
+            int batchSize = 100;
 
             StopWatch watch = new StopWatch();
             watch.start();
@@ -46,8 +47,7 @@ public class ProductGenerator {
                                     batchCount.incrementAndGet();
                                     prodCountForStatement.set(1);
                                 }
-                                int batchSize = 100;
-                                logger.info("batchSize = {}", batchSize);
+
                                 if (batchCount.get() > 0 && batchCount.get() % batchSize == 0) {
                                     statement.executeBatch();
                                 }
@@ -61,6 +61,7 @@ public class ProductGenerator {
             watch.stop();
             double elapsedSeconds = watch.getTime() / 1000.0;
             double messagesPerSecond = totalQuantity.get() / elapsedSeconds;
+            logger.info("batchSize = {}", batchSize);
             logger.info("GENERATING SPEED: {} , total = {} messages, elapseSeconds = {}",
                     messagesPerSecond, totalQuantity.get(), elapsedSeconds);
         }
