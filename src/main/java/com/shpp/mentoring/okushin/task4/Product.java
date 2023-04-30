@@ -1,6 +1,7 @@
 package com.shpp.mentoring.okushin.task4;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 public class Product {
     //@NotNull(message = "Name cannot be null")
@@ -33,7 +34,6 @@ public class Product {
     public void setTypeId(int typeId) {
         this.typeId = typeId;
     }
-
 
 
 }

@@ -1,5 +1,6 @@
 package com.shpp.mentoring.okushin.task4;
 
+import com.shpp.mentoring.okushin.exceptions.CreateStatementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +14,7 @@ public class GenerateThread implements Runnable {
 
 
     private final String sql;
-private final Connection connection;
+    private final Connection connection;
 
     private final int typesCount;
 
@@ -28,15 +29,16 @@ private final Connection connection;
 
     @Override
     public void run() {
-       logger.info("Thread starts");
+        logger.info("Thread starts");
         try {
             connection.setAutoCommit(false);
-            productGenerator.insertValidatedProducts(connection, amount, typesCount,sql);
+            productGenerator.insertValidatedProducts(connection, amount, typesCount, sql);
             connection.commit();
             connection.close();
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("Error executing Sql command: {}", e.getMessage(), e);
+            throw new CreateStatementException("Exception while creating statement");
         }
     }
 }

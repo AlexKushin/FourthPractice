@@ -2,6 +2,7 @@ package com.shpp.mentoring.okushin.task4;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
+import com.shpp.mentoring.okushin.exceptions.ReadFileException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,10 +15,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class CsvImporter {
+    private CsvImporter() {
+    }
 
     private static final Logger logger = LoggerFactory.getLogger(CsvImporter.class);
 
-    public static void importToDB(Connection connection, String csvFilePath, String tableName) {
+    public static void importToDB(Connection connection, String csvFilePath, String tableName) throws SQLException {
 
         try (CSVReader reader = new CSVReader(new FileReader(csvFilePath, StandardCharsets.UTF_8))) {
 
@@ -43,6 +46,7 @@ public class CsvImporter {
                 }
             }
             sql.append(")");
+            logger.info("sql ........... {}", sql);
 
 
             try (PreparedStatement statement = connection.prepareStatement(sql.toString())) {
@@ -55,15 +59,16 @@ public class CsvImporter {
 
                 }
                 connection.close();
-                logger.info("Data was successfully imported");
+                logger.info("Data was successfully imported from CSV file to DataBase");
             }
 
-        } catch (SQLException | CsvValidationException e) {
-            logger.error("Error SQL: {} ", e.getMessage());
+        } catch (CsvValidationException e) {
+            logger.error("Error while validation CSV file: {} ", e.getMessage());
         } catch (FileNotFoundException e) {
             logger.error("There is no file to read {}", e.getMessage());
         } catch (IOException e) {
-            logger.error("Error whole input/output {}", e.getMessage());
+            logger.error("Error while input/output {}", e.getMessage());
+            throw new ReadFileException("Can't read file by path");
         }
 
     }

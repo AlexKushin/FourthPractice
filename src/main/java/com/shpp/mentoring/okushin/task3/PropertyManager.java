@@ -5,7 +5,6 @@ import com.shpp.mentoring.okushin.task4.App;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -17,6 +16,9 @@ import java.util.Properties;
  * it has methods
  */
 public class PropertyManager {
+    private PropertyManager() {
+    }
+
     private static final Logger logger = LoggerFactory.getLogger(PropertyManager.class);
 
 
