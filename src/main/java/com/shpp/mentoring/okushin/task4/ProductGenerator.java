@@ -29,7 +29,7 @@ public class ProductGenerator {
             final AtomicInteger totalQuantity = new AtomicInteger(0);
             final AtomicInteger prodCountForStatement = new AtomicInteger(1);
             final AtomicInteger batchCount = new AtomicInteger(0);
-            int batchSize = 1000;
+            int batchSize = 200;
 
             StopWatch watch = new StopWatch();
             watch.start();
@@ -50,6 +50,7 @@ public class ProductGenerator {
                                 if (batchCount.get() > 0 && batchCount.get() % batchSize == 0) {
                                     statement.executeBatch();
                                 }
+
 
                             }
                         } catch (SQLException e) {
