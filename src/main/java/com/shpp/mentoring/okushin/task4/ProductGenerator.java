@@ -28,7 +28,7 @@ public class ProductGenerator {
         final AtomicInteger totalQuantity = new AtomicInteger(0);
         int prodCountForStatement = 1;
         int batchCount = 0;
-        int batchSize = 200;
+        int batchSize = 50;
         StopWatch watch = new StopWatch();
         watch.start();
         String sql = null;
