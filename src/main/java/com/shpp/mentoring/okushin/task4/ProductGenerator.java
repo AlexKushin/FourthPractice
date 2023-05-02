@@ -12,7 +12,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Stream;
 
 public class ProductGenerator {
     private static final Logger logger = LoggerFactory.getLogger(ProductGenerator.class);
@@ -24,47 +23,74 @@ public class ProductGenerator {
         this.validator = validator;
 
     }
-    public void insertValidatedProducts(Connection connection, int amount, int typesCount, String sql) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            final AtomicInteger totalQuantity = new AtomicInteger(0);
-            final AtomicInteger prodCountForStatement = new AtomicInteger(1);
-            final AtomicInteger batchCount = new AtomicInteger(0);
-            int batchSize = 300;
+    public void insertValidatedProducts(Connection connection, int amount, int typesCount) throws SQLException {
 
-            StopWatch watch = new StopWatch();
-            watch.start();
-            Stream.generate(() -> new Product(RandomStringUtils.randomAlphabetic(1, 10), random.nextInt(typesCount + 1)))
-                    .takeWhile(b -> totalQuantity.get() < amount)
-                    .forEach(product -> {
-                        try {
-                            if (validator.validate(product).isEmpty()) {
-                                statement.setString(prodCountForStatement.getAndIncrement(), String.valueOf(product.getTypeId()));
-                                statement.setString(prodCountForStatement.getAndIncrement(), String.valueOf(product.getName()));
-                                totalQuantity.incrementAndGet();
-                                if (prodCountForStatement.get() > 2000) {
-                                    statement.addBatch();
-                                    batchCount.incrementAndGet();
-                                    prodCountForStatement.set(1);
-                                }
+        final AtomicInteger totalQuantity = new AtomicInteger(0);
+        int prodCountForStatement = 1;
+        int batchCount = 0;
+        int batchSize = 200;
+        StopWatch watch = new StopWatch();
+        watch.start();
+        String sql = null;
+        int numberOfProductsInPS = 0;
+        int leftAmount = amount;
+        while (leftAmount>0) {
+            if (leftAmount <= 10) {
+                sql = ("INSERT INTO availability_goods.products (type_id,product_name) VALUES (CAST(? AS INTEGER), ? )");
+                numberOfProductsInPS = 1;
+            }
+            if (leftAmount > 10 && leftAmount <= 100) {
+                sql = ("INSERT INTO availability_goods.products (type_id,product_name) VALUES" + " (CAST(? AS INTEGER), ? ), ".repeat(9) +
+                        "(CAST(? AS INTEGER), ? )");
+                numberOfProductsInPS = 10;
+            }
+            if (leftAmount >100 && leftAmount <= 1000) {
+                sql = ("INSERT INTO availability_goods.products (type_id,product_name) VALUES" + " (CAST(? AS INTEGER), ? ), ".repeat(99) +
+                        "(CAST(? AS INTEGER), ? )");
+                numberOfProductsInPS = 100;
+            }
+            if (leftAmount > 1000) {
+                sql = "INSERT INTO availability_goods.products (type_id,product_name) VALUES" + " (CAST(? AS INTEGER), ? ), ".repeat(999) +
+                        "(CAST(? AS INTEGER), ? )";
+                numberOfProductsInPS = 1000;
+            }
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
 
-                                if (batchCount.get() > 0 && batchCount.get() % batchSize == 0) {
-                                    statement.executeBatch();
-                                }
+                while (prodCountForStatement < (numberOfProductsInPS*2)+1) {
+                    Product p = new Product(RandomStringUtils.randomAlphabetic(1, 10), random.nextInt(typesCount + 1));
+                    try {
+                        if (validator.validate(p).isEmpty()) {
+                            statement.setString(prodCountForStatement, String.valueOf(p.getTypeId()));
+                            prodCountForStatement++;
+                            statement.setString(prodCountForStatement, String.valueOf(p.getName()));
+                            prodCountForStatement++;
+                            totalQuantity.incrementAndGet();
+                            leftAmount--;
 
-
+                            if (prodCountForStatement > numberOfProductsInPS*2 ) {
+                                statement.addBatch();
+                                batchCount++;
                             }
-                        } catch (SQLException e) {
-                            logger.error("Error executing Sql command: {}", e.getMessage(), e);
-                            throw new CreateStatementException("Exception while creating statement");
+                            if (batchCount > 0 && batchCount % batchSize == 0) {
+                                statement.executeBatch();
+                            }
+                            statement.executeBatch();
                         }
-                    });
-            watch.stop();
-            double elapsedSeconds = watch.getTime() / 1000.0;
-            double messagesPerSecond = totalQuantity.get() / elapsedSeconds;
-            logger.info("batchSize = {}", batchSize);
-            logger.info("GENERATING SPEED: {} , total = {} messages, elapseSeconds = {}",
-                    messagesPerSecond, totalQuantity.get(), elapsedSeconds);
+                    } catch (SQLException e) {
+                        logger.error("Error executing Sql command: {}", e.getMessage(), e);
+                        throw new CreateStatementException("Exception while creating statement");
+                    }
+                }
+            }
+            prodCountForStatement=1;
         }
+        watch.stop();
+        double elapsedSeconds = watch.getTime() / 1000.0;
+        double messagesPerSecond = totalQuantity.get() / elapsedSeconds;
+        logger.info("batchSize = {}", batchSize);
+        logger.info("GENERATING SPEED: {} , total = {} messages, elapseSeconds = {}",
+                messagesPerSecond, totalQuantity.get(), elapsedSeconds);
+
     }
 }
 

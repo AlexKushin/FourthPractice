@@ -13,15 +13,14 @@ public class GenerateThread implements Runnable {
     int amount;
 
 
-    private final String sql;
+
     private final Connection connection;
 
     private final int typesCount;
 
-    public GenerateThread(ProductGenerator productGenerator, int amount, String sql, Connection connection, int typesCount) {
+    public GenerateThread(ProductGenerator productGenerator, int amount, Connection connection, int typesCount) {
         this.productGenerator = productGenerator;
         this.amount = amount;
-        this.sql = sql;
         this.connection = connection;
         this.typesCount = typesCount;
     }
@@ -32,7 +31,7 @@ public class GenerateThread implements Runnable {
         logger.info("Thread starts");
         try {
             connection.setAutoCommit(false);
-            productGenerator.insertValidatedProducts(connection, amount, typesCount, sql);
+            productGenerator.insertValidatedProducts(connection, amount, typesCount);
             connection.commit();
             connection.close();
 

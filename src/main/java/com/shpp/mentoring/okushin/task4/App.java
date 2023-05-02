@@ -30,21 +30,21 @@ public class App {
         //AWS String url = "jdbc:postgresql://epicentr-repo.cm8gtofqzkw2.eu-central-1.rds.amazonaws.com:5432/";
         //LocalDB String jdbcUrl="jdbc:postgresql://localhost:5432/epicentr_repo"
 
-        //I will have success in the short term
         StopWatch watch = new StopWatch();
-
         Properties configPropForQueries = new Properties();
         PropertyManager.readPropertyFile("configurationsHikariCpForQueries.properties", configPropForQueries);
         logger.info("HikariCP configurations was successfully read ");
         Properties configPropForGenerating = new Properties();
-        PropertyManager.readPropertyFile("configurationsDBCPForGeneratingProducts.properties", configPropForGenerating);
+        PropertyManager.readPropertyFile("configurationsDBCPForGeneratingProducts.properties",
+                configPropForGenerating);
 
         HikariConfig config1 = new HikariConfig(configPropForQueries);
 
 
         try (HikariDataSource dataSourceForQueries = new HikariDataSource(config1)) {
             watch.start();
-            SqlExecuter.executeSqlScript(dataSourceForQueries.getConnection(), "ddlScriptForDataBaseCreating.sql");
+            SqlExecuter.executeSqlScript(dataSourceForQueries.getConnection(),
+                    "ddlScriptForDataBaseCreating.sql");
             watch.stop();
             logger.info("Creating tables time= {}", watch.getTime() / 1000.0);
             watch.reset();
@@ -57,19 +57,17 @@ public class App {
             logger.info("Import fields from csv time= {}", watch.getTime() / 1000.0);
             watch.reset();
 
-            int numberThreads = 10;
+            int numberThreads = 11;
             ExecutorService executorService = Executors.newFixedThreadPool(numberThreads);
-
-            String sql = "INSERT INTO availability_goods.products (type_id,product_name) VALUES" + " (CAST(? AS INTEGER), ? ), ".repeat(999) +
-                    "(CAST(? AS INTEGER), ? )";
-
 
             try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
                 Validator validator = factory.getValidator();
 
-                int typesCount = SqlExecuter.executeQuerySqlScript(dataSourceForQueries.getConnection(), "SELECT count(*) from availability_goods.types;");
+                int typesCount = SqlExecuter.executeQuerySqlScript(dataSourceForQueries.getConnection(),
+                        "SELECT count(*) from availability_goods.types;");
                 logger.info("Types number = {}", typesCount);
-                int storesCount = SqlExecuter.executeQuerySqlScript(dataSourceForQueries.getConnection(), "SELECT count(*) from availability_goods.stores;");
+                int storesCount = SqlExecuter.executeQuerySqlScript(dataSourceForQueries.getConnection(),
+                        "SELECT count(*) from availability_goods.stores;");
                 logger.info("Stores number = {}", storesCount);
 
                 watch.start();
@@ -79,15 +77,21 @@ public class App {
                 watch.reset();
 
                 ProductGenerator generator = new ProductGenerator(validator);
-                int amount = 3000000;
+                int amount = 3000001;
 
                 watch.start();
-                for (int i = 0; i < numberThreads; i++) {
-                    executorService.submit(new GenerateThread(generator, amount / numberThreads, sql, basicDataSourceForGeneratingProducts.getConnection(), typesCount));
+                for (int i = 0; i < numberThreads-1; i++) {
+                    executorService.submit(new GenerateThread(generator, amount / (numberThreads-1),
+                            basicDataSourceForGeneratingProducts.getConnection(), typesCount));
                 }
+
+               executorService.submit(new GenerateThread(generator, amount%10,
+                       basicDataSourceForGeneratingProducts.getConnection(), typesCount));
+
                 executorService.shutdown();
                 while (true) {
                     if (executorService.isTerminated()) {
+
                         watch.stop();
                         basicDataSourceForGeneratingProducts.close();
                         logger.info("10 connection for generating products are closed");
@@ -98,7 +102,8 @@ public class App {
                         watch.reset();
 
                         watch.start();
-                        SqlExecuter.executeSqlPreparedStatement(dataSourceForQueries.getConnection(), "dmlCommandForFillingTable.sql", storesCount);
+                        SqlExecuter.executeSqlPreparedStatement(dataSourceForQueries.getConnection(),
+                                "dmlCommandForFillingTable.sql", storesCount);
                         watch.stop();
                         logger.info("filling stores speed with products= {}", watch.getTime() / 1000.0);
                         watch.reset();
@@ -112,7 +117,8 @@ public class App {
                         logger.info("Adding indexes time= {}", watch.getTime() / 1000.0);
                         String productType = System.getProperty("productType");
 
-                        SqlExecuter.executeQuerySqlScript(dataSourceForQueries.getConnection(), "sqlCommandsToExecute.sql", productType);
+                        SqlExecuter.executeQuerySqlScript(dataSourceForQueries.getConnection(),
+                                "sqlCommandsToExecute.sql", productType);
                         return;
                     }
                 }

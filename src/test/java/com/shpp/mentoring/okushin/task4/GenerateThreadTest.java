@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class GenerateThreadTest extends GenerateThread {
 
     public GenerateThreadTest(ProductGenerator productGenerator, int amount, String sql, Connection connection, int typesCount) {
-        super(productGenerator, amount, sql, connection, typesCount);
+        super(productGenerator, amount, connection, typesCount);
     }
 
     @Test
